@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>测试 -- canvas -- globalCompositeOperation</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <style>
+        	* {
+        		padding: 0px;
+        		margin: 0px;
+        	}
+        	body {
+        		position: fixed;
+        		width: 100%;
+        		height: 100%;
+        		overflow: hidden;
+        	}
+        	.img_1 {
+        		width: 100%;
+        		height: 100%;
+        	}
+        	#myCanvas {
+        		position: absolute;
+        		top: 0px;
+        		left: 0px;
+        	}
+        </style>
+	</head>
+	<body>
+		
+		<img class='img_1' src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1475939057&di=546e3bf59d7868c63b18de5ddc71fd50&src=http://g.hiphotos.baidu.com/zhidao/pic/item/4034970a304e251f3ba0d299a186c9177f3e537f.jpg" />
+		
+		<canvas id='myCanvas'></canvas>
+		
+		<script>
+			
+			"use strict"
+			
+			var iH = document.documentElement.clientHeight,
+				iW = document.documentElement.clientWidth,
+				oCanvas = document.getElementById("myCanvas"),
+				r = 30,
+				timer = null,
+				times = 30;
+				
+			oCanvas.height = iH;
+			oCanvas.width = iW;
+			
+			var tcs = oCanvas.getContext('2d');
+			
+			fnA();
+			
+			timer = setInterval(function(){
+				fnA();
+				r+=6;
+				if(r> iW*1.5){
+					clearInterval(timer);
+					timer = null;
+					console.log("结束");
+				}
+			}, times);
+
+			
+			function fnA(){
+				tcs.clearRect(0, 0, iW, iH);
+				tcs.globalCompositeOperation = 'source-over';
+				tcs.fillStyle = "#000";
+				tcs.fillRect(0, 0, iW, iH);
+				tcs.globalCompositeOperation = 'destination-out';
+				tcs.fillStyle = "red";
+				tcs.beginPath();
+				tcs.arc(iW/2, iH/2, r, 0, Math.PI*2);
+				tcs.fill();
+				tcs.closePath();
+			}
+			
+			
+			
+		</script>
+		
+	</body>
+</html>
