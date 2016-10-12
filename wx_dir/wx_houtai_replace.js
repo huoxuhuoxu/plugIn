@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         New Userscript
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       You
 // @match        https://zb.weixin.qq.com/nearby/html/*
@@ -73,14 +73,24 @@
             var timer = setInterval(function(){
                 if($("#desc_edit").length > 0){
                     clearInterval(timer);
+                    /*
                     if(tiger_data.bool == "1"){
                           $("#desc_edit").val(tiger_data.sTitle);
                     }
                     if(tiger_data.bool == "2"){
                           $("#desc_edit").val(tiger_data.value);
                     }
+                    if(tiger_data.bool == '3'){
+                          $("#page_url").val(tiger_data.value);
+                    }
+                    */
                     
-                    fireKeyEvent(document.getElementById("desc_edit"), "keyup", 13);
+                    // 6786867
+                    
+                    var fn = fnSwitchInvoking(tiger_data.bool);
+                    fn();
+                    
+                    //fireKeyEvent(document.getElementById("desc_edit"), "keyup", 13);
                     $("#save_button").click();
                     
                     setTimeout(function(){
@@ -89,6 +99,36 @@
                 }
             }, 1000);
 
+            
+            function fnSwitchInvoking(s){
+                var fn = null;
+                switch(s){
+                    case '1': fn = fnB_1;
+                        break;
+                    case '2': fn = fnB_2;
+                        break;
+                    case '3': fn = fnB_3;
+                        break;
+                    default:
+                        alert('发生了不可预知的错误，联系测试人员');
+                        break;
+                }
+                return fn;
+            }
+            
+            function fnB_1(){
+                  $("#desc_edit").val(tiger_data.sTitle);
+                  fireKeyEvent(document.getElementById("desc_edit"), "keyup", 13);
+            }
+            function fnB_2(){
+                  $("#desc_edit").val(tiger_data.value);
+                  fireKeyEvent(document.getElementById("desc_edit"), "keyup", 13);
+            }
+            function fnB_3(){
+                  $("#page_url").val(tiger_data.sTitle);
+                  fireKeyEvent(document.getElementById("page_url"), "keyup", 13);
+            }
+            
         }, 1000);
         
     }
@@ -153,8 +193,8 @@
     function fnA(){
     
         var oTextarea = $("<textarea id='tiger_js_textarea' placeholder='请输入搜索信息,按逗号或空格分割' style='width: 100%;height:100px;margin: 5px;'></textarea>");
-        var oSelect = $("<select id='tiger_js_select'>"+"<option value='1' selected>统一标题</option>"+"<option value='2'>设备号</option>"+"</select>");
-        var oInt = $("<input id='tiger_js_input' style='display: block;width: 200px;margin: 5px;height:40px;line-height: 40px;' value='' placeholder='请输入统一标题' />");
+        var oSelect = $("<select id='tiger_js_select'>"+"<option value='1' selected>统一标题</option>"+"<option value='2'>设备号</option>"+"<option value='3'>修改url</option>"+"</select>");
+        var oInt = $("<input id='tiger_js_input' style='display: block;width: 200px;margin: 5px;height:40px;line-height: 40px;' value='' placeholder='请输入统一内容' />");
         var obtn = $("<button id='tiger_js_button' style='height:30px;width:120px;margin: 5px;display: block;'>确认开始执行</button>");
         $(".mod-weixin-area__body_padding").before(oTextarea);
         $(".mod-weixin-area__body_padding").before(oSelect);
@@ -163,7 +203,7 @@
 
         // 下拉框
         $("#tiger_js_select").on("change", function(){
-            if(oSelect.val() == 1){
+            if(oSelect.val() == 1 || oSelect.val() == 3){
                 $('#tiger_js_input').css("display", 'block');
             }else{
                 $('#tiger_js_input').css("display", 'none');
@@ -181,10 +221,10 @@
             var aDevice = sTextarea.split(/ |,/);
             var iNum = aDevice.shift();
             // 下拉 统一输入
-            if(nBool == 1){
+            if(nBool == 1 || nBool == 3){
                 sInt = $("#tiger_js_input").val();
                 if(!sInt){
-                      alert("nmzz, 请输入统一标题");
+                      alert("nmzz, 请输入统一内容");
                       return false;
                 }
             }else{
@@ -194,6 +234,7 @@
             // 1002023319,1002023298,1002024616,1002024192,1002023613,1002022883,1002024509
             // 6786867,6786866,6786865,6786864,6786863,6786858
             // 6786861,6786867,6786866,6786823,6786822
+            // 6786866,6786861,6786828,6786823,6786822,6786817
 
             $("#fuzzy_search").val(iNum);
             $("#search_icon").click();
