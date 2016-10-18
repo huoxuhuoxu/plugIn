@@ -18,18 +18,27 @@
     
     _$(".breadcrumbs").after(_$("<button type='button' class='hz_tiger_btn'>开始</button>"));
     _$(".breadcrumbs").after(_$("<input type='text' style='width: 400px;' placeholder='删除请填入1,否则别写' class='hz_tiger_input' />"));
-    _$(".breadcrumbs").after(_$("<textarea class='hz_tiger_text' style='height: 100px;width:100%;' placeholder='请输入设备号'></textarea>"));
+    _$(".breadcrumbs").after(_$("<textarea class='hz_tiger_text' style='height: 100px;width:100%;' placeholder='请输入设备id'></textarea>"));
+    _$(".breadcrumbs").after(_$("<textarea class='hz_tiger_text_sn' style='height: 100px;width:100%;' placeholder='请输入设备sn'></textarea>"));
     
     
     var aJq = [];
     _$(".hz_tiger_btn").on("click", function(){
      
             var sText = _$('.hz_tiger_text').val().trim();
-            if(!sText){
+            var sSn = _$(".hz_tiger_text_sn").val().trim();
+            if(!sText && !sSn){
                 alert("请在输入框输入内容");
                 return '';
             }
-            var aText = sText.split(/ |,/);
+           
+            var aText = null;
+            if(sText){
+                aText = sText.split(/ |,/);
+            }else{
+                aText = sSn.split(/ |,/);
+            }
+            
         
            var url = '/tiger/admin/doChangeDeviceRabate/';
            var s = '';
@@ -56,6 +65,7 @@
                       var a = JSON.parse(f);
                        if(a.code !== 0){
                             console.log(a.msg, res[i]);
+                           alert("第"+(i+1)+"个,返回"+a.msg);
                        }
                    });
                }
@@ -79,7 +89,8 @@
               "type": "GET",
          });
     }
- 
+    
+    
+    
 
-   
 })();
