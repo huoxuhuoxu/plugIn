@@ -1,9 +1,16 @@
 
 # -*- coding: utf-8 -*-
 
+# 第二阶段 数据分类输出 与 数据格式存储    分别存储／详情 A码相关
+
 import shelve, pickle
 
-db = shelve.open("people-shelve")
+# db = shelve.open("people-shelve")
+
+dbfile = open("total_data", 'rb')
+db = pickle.load(dbfile)
+dbfile.close()
+
 
 data_line = []
 
@@ -30,7 +37,7 @@ for k in data_line:
 
 
 
-
+# db.close()
 
 
 
