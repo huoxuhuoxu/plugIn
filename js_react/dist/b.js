@@ -32,23 +32,105 @@ var fnWhen = function fnWhen(jq) {
 	});
 };
 
+// 需要将 搜索 ／ 分页 公共区数据划到一块去
+// 分页总和 组件
 var PageModule = React.createClass({
 	displayName: "PageModule",
 
 	getInitialState: function getInitialState() {
 		return {
-			"data": [{ "name": "lee", "age": 12 }, { "name": "peter", "age": 14 }]
+			"data": [],
+			"pages": [],
+			"current_page": null,
+			"bAjaxStop": null,
+			"oldUrl": ''
 		};
 	},
 	setTableData: function setTableData(data) {
 		this.setState({ data: data });
 	},
+	getCurrentInfo: function getCurrentInfo() {
+		return {
+			"pages": this.state.pages,
+			"current_page": this.state.current_page
+		};
+	},
+	getNewData: function getNewData(num, arr) {
+		this.setState({
+			"current_page": num,
+			"pages": arr,
+			"bAjaxStop": true
+		});
+		var jqxhr = fnAjax(page_url + this.state.current_page);
+		fnWhen(jqxhr, function (res, status, xhr) {
+			console.log("success!");
+		}, function (xhr, errText, errStatus) {
+			var data = [{ "name": "lee", "age": num }, { "name": "peter", "age": num }];
+			this.setState({ "data": data });
+		}.bind(this), function () {
+			this.setState({
+				"bAjaxStop": false
+			});
+		}.bind(this));
+	},
+	searchNewData: function searchNewData(searchTxt) {
+		this.setState({
+			"current_page": 1,
+			"bAjaxStop": true,
+			'oldUrl': page_url + "1" + "/" + searchTxt
+		});
+		var jqxhr = fnAjax(page_url + this.state.current_page);
+		fnWhen(jqxhr, function (res, status, xhr) {
+			console.log("success!");
+		}, function (xhr, errText, errStatus) {
+			var data = [{ "name": "lee", "age": num }, { "name": "peter", "age": num }];
+			this.setState({ "data": data });
+		}.bind(this), function () {
+			this.setState({
+				"bAjaxStop": false
+			});
+		}.bind(this));
+	},
+	componentWillMount: function componentWillMount() {
+		// 假设挂载之前发起ajax请求 获取了初始化的数据
+		this.setState({
+			"pages": [1, 2, 3, 4, 5, 6, 7],
+			"current_page": 1,
+			"bAjaxStop": false,
+			"data": [{ "name": "lee", "age": 12 }, { "name": "peter", "age": 14 }]
+		});
+	},
 	render: function render() {
 		return React.createElement(
 			"div",
 			null,
+			React.createElement(SearchTextPage, { searchNewDataParent: this.searchNewData }),
 			React.createElement(TableDataShow, { data: this.state.data }),
-			React.createElement(PageGroup, { callbackParent: this.setTableData })
+			React.createElement(PageGroup, {
+				getCurrentInfoParent: this.getCurrentInfo,
+				getNewDataParent: this.getNewData })
+		);
+	}
+});
+
+// 搜索框
+var SearchTextPage = React.createClass({
+	displayName: "SearchTextPage",
+	handlerSearchClick: function handlerSearchClick(event) {
+		if (this.refs.mySearchInput.value) {
+			console.log("发起请求!");
+		}
+	},
+	render: function render() {
+		return React.createElement(
+			"div",
+			null,
+			React.createElement("input", { type: "text", placeholder: "请输入搜索内容", ref: "mySearchInput" }),
+			React.createElement(
+				"button",
+				{ onClick: this.handlerSearchClick },
+				"搜索"
+			)
 		);
 	}
 });
@@ -108,45 +190,16 @@ var TableDataShow = React.createClass({
 });
 
 // 分页组件
-// 干掉 生命周期,严重影响了状态的判定
 var PageGroup = React.createClass({
 	displayName: "PageGroup",
 
-	getInitialState: function getInitialState() {
-		return {
-			"pages": [1, 2, 3, 4, 5, 6, 7],
-			"current_page": 1,
-			"bAjaxStop": false
-		};
-	},
 	handlerClickPageHref: function handlerClickPageHref(event) {
-		var _this = this;
 
-		if (!this.state.bAjaxStop) {
-			var jqxhr;
 
-			(function () {
 				var num = event.target.getAttribute("data-page");
-				_this.setState({
-					current_page: num,
-					pages: _this.handlerChangePageNum(Number(num)),
-					"bAjaxStop": true
-				});
+		this.props.getNewDataParent(num, this.handlerChangePageNum(Number(num)));
 
-				jqxhr = fnAjax(page_url + _this.state.current_page);
 
-				fnWhen(jqxhr, function (res, status, xhr) {
-					console.log("success!");
-				}, function (xhr, errText, errStatus) {
-					var data = [{ "name": "lee", "age": num }, { "name": "peter", "age": num }];
-					this.props.callbackParent(data);
-				}.bind(_this), function () {
-					this.setState({
-						"bAjaxStop": false
-					});
-				}.bind(_this));
-			})();
-		}
 	},
 	handlerChangePageNum: function handlerChangePageNum(num) {
 		if (num <= 4) {
@@ -155,14 +208,12 @@ var PageGroup = React.createClass({
 			return [num - 3, num - 2, num - 1, num, num + 1, num + 2, num + 3];
 		}
 	},
-	// componentDidUpdate: function(nextProps, nextState){
 
-	// },
 	render: function render() {
 		return React.createElement(
 			"div",
 			null,
-			this.state.pages.map(function (value) {
+			this.props.getCurrentInfoParent()['pages'].map(function (value) {
 
 				return React.createElement(
 					"span",
@@ -170,7 +221,14 @@ var PageGroup = React.createClass({
 					value,
 					"   "
 				);
-			}.bind(this))
+			}.bind(this)),
+			React.createElement(
+				"li",
+				null,
+				"当前是",
+				this.props.getCurrentInfoParent()['current_page'],
+				"页"
+			)
 		);
 	}
 });

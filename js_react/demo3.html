@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8" />
+        <title>svg测试</title>
+        <meta name="Content-Security-Policy" content="upgrade-insecure-requests" />
+        <script src="lib/snap.svg-min.js"></script>
+	</head>
+	<body>
+
+<!-- 1 -->
+<!--		
+		<svg id="svg1" width="100" height="100"></svg>
+        <svg id="svg2" width="100" height="100"></svg>
+            
+        <input id="button" type="button" value="蓝圈圈跑到红圈圈家里蹭饭">
+
+
+        <script>
+            // svg块针对 某图形
+            // append , add 将 图形放入另外一个 svg中，是否能够将某图形放入 另一个图形中有带确认
+            // 作用差不多,添加／追加
+            var svg1 = Snap("#svg1"), svg2 = Snap("#svg2");
+            var c1 = svg1.paper.circle(50, 50, 40).attr({
+                fill: "#f00"	// 红色
+            });
+            var c2 = svg2.paper.circle(50, 50, 30).attr({
+                fill: "#00f"	// 蓝色
+            });
+
+            // 事件
+            document.querySelector("#button").addEventListener("click", function() {
+                svg1.add(c2);
+                this.value = "蹭饭成功";
+            });
+
+        </script>-->
+
+<!-- 2 -->
+        <!--<svg id='svg3' height='200' width='200'></svg>
+
+        <input type='button' value='改变' id='button2' />
+
+        <script>
+
+            // 默认 后画的图形覆盖新图形，canvas原理一致,after重置顺序，c2后跟c1
+            // .paper.circle 当前:svg块中的一个图形，为圆形
+            // before 针对 图形 某图形之前
+            // 图形针对 图形
+            var svg3 = Snap("#svg3");
+            var c1 = svg3.paper.circle(50, 50, 40).attr({
+                fill: "red",
+            });
+            var c2 = svg3.paper.circle(100, 50, 40).attr({
+                fill: "green",
+            });
+
+            document.querySelector("#button2").onclick = function(){
+                c2.after(c1);
+            }
+
+        </script>        -->
+
+
+<!-- 3 -->
+        <!--<svg width='100' height='100' id='svg'></svg>
+
+        <input id='button' type='button' value='点击' />
+
+        <script>
+            // mina.bounce 弹性释放 ： 改变的属性,持续时长,弹性释放,回调
+            // animate 图形 动画,问 svg 是否可以直接绑定 动画
+            var svg = Snap("#svg");
+            var c = svg.paper.circle(50, 50, 40).attr({
+                fill: "red",
+            });
+            document.querySelector("#button").onclick = function(){
+                var button = this;
+                c.animate({
+                    fill: "blue"
+                }, 1500, mina.bounce, function(){
+                    button.value = 'aaa';
+                });
+            }
+
+        </script>-->
+
+
+<!-- 4 -->
+        <!--<svg id='svg'></svg>
+        
+        <script>
+            // asPX('') 获取 通过库生成图形的实际属性值，,cx,cy,r...
+            // 主要获取 原生px相关的值
+            var svg = Snap('#svg');
+            var c = svg.paper.circle(50, 50, 30);
+            console.log(c.asPX('cx'), c.asPX("cy"), c.asPX("r"));
+        </script>-->
+
+
+<!-- 5 -->
+
+    <!--<svg id='svg' height='100' width="100"></svg>
+
+    <script>
+
+        // fill 填充,stroke:描边 ,strokeWidth:描边粗度,fill-opacity: 填充不透明度
+        // attr("") 获取 某 图形的参数信息
+        var svg = Snap("#svg");
+        var c = svg.paper.circle(50, 50, 40).attr({
+            fill: "red",
+            stroke: "#000",
+            strokeWidth: 2,
+            "fill-opacity": .3
+        });
+        console.log(c.attr("fill"));
+
+    </script>-->
+
+
+<!-- 6 -->
+
+
+    <!--<svg id='svg' width='100' height='100'></svg>
+
+    <script>
+
+        var svg = Snap("#svg");
+        var c = svg.paper.circle(50, 50, 30).attr({
+            fill: "red",
+        }).click(function(){
+            this.animate({
+                fill: "green",
+            }, 1000, mina.bounce);
+        });
+
+    </script>-->
+
+
+<!-- 7 -->
+
+    <!--<svg id='svg' height='100' width='200'></svg>
+
+    <script>
+        // clone 拷贝 ，cx 原本的属性通过 原生生成的属性名，进行重新设置
+
+        var svg = Snap("#svg");
+        var c = svg.paper.circle(50, 50, 30);
+        c.clone().attr({
+            cx: 150
+        });
+
+
+    </script>-->
+
+
+<!-- 8 -->
+
+    <!--<svg id='svg' height='199' width='100'></svg>
+
+    <script>
+        // click 针对图形的点击事件,dblclick 针对图形的双击事件
+        // .data(key, value) 针对此图形设置数据,paper.text(x,y,txt) 画出文本形状
+        // data(key) 获取 key 相关的数据
+        // 依旧是 后画的 添加在 svn图形的最上方
+        var svg = Snap("#svg");
+        var c = svg.paper.circle(50, 50, 40).attr({
+            "fill": "red",
+        }).data('author', 'aaaa').click(function(){
+            svg.paper.text(10, 10, this.data('author'));
+        });
+
+    </script>-->
+
+
+<!-- 9 -->
+
+<!--<svg id="svg" width="100" height="100"></svg>
+
+<script>
+    // drag() 绑定 拖拽事件
+    // onmove/onstart/onend/mcontext/scontext/econtext 三个事件及对象
+var svg = Snap("#svg");
+var c1 = svg.paper.circle(50, 50, 40).drag();
+</script>-->
+
+
+<!-- 10 -->
+
+
+<!--<svg id="svg" width="1000" height="1000"></svg>
+
+<script>
+var svg = Snap("#svg");
+var c = svg.paper.rect(50, 30, 120, 80, 15);
+console.dir(c.getBBox());    // 结果见后面的截图
+</script>-->
+
+
+
+<!-- 11 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+	</body>
+</html>
+		
