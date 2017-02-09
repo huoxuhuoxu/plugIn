@@ -2,4 +2,7 @@ js_react/*
 js_demo/*
 python_demo/*
 *DS_Store
+gulpfile.js
+node_modules/*
+
 
