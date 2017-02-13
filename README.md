@@ -1,5 +1,5 @@
 # plugIn
-Version 1.0.2
+Version 1.0.3
 
 
 
@@ -37,4 +37,16 @@ linux_shell: linux下脚本
 sudoInstallNodeModule.sh: 一键安装node／前端所需模块,my_engine所需模块列表
 
 
+
+
+
+
+touch_module: 触摸模块,支持多指,单指触摸
+
+
+
+
+
+
+base_module: 基础模块,支持redux中createStore后dispatch重写,基础fetch等
 
