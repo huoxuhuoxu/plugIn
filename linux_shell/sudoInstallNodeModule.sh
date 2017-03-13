@@ -66,6 +66,14 @@ my_engine=(
 	'seneca'
 	'mocha'
 	'serve-favicon'
+	'morgan'
+	'webpack'
+	'babel-core'
+	'babel-loader'
+	'url-loader'
+	'style-loader'
+	'npm-zepto'
+	'css-loader'
 )
 
 
@@ -75,6 +83,18 @@ do
    echo "完成:${engine}"
 done
 
+if [ ! -e webpack.config.js ]
+then
+	echo -e '开始配置webpack文件'
+	touch webpack.config.js
+	echo -e '\n' >> webpack.config.js
+	echo -e 'var path = require("path");' >> webpack.config.js
+	echo -e 'var webpack = require("webpack")' >> webpack.config.js
+	echo -e 'module.exports=(options = {}) => {};' >> webpack.config.js
+
+fi
+
+echo -e 'webpack.config.js 配置完成...'
 
 
 # 检测是否存在 gulpfile.js 文件
