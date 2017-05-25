@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang='zh'>
+	<head>
+		<title> 触摸库 测试 </title>
+		<meta name='keywords' content="触摸" />
+		<meta name='discription' content='触摸库,测试阶段' />
+		<meta name="viewport" content='width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0'  />
+		<style>
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			body {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				top: 0px;
+				left: 0px;
+			}
+
+			.image_test {
+				height: 100%;
+				width: 100%;
+			}
+		</style>
+ 	</head>
+	<body>
+		
+		<img src="/images/hz_bg_2.jpg" class='image_test' />
+
+		<script>
+			(function(){
+				var oScript = document.createElement("script"),
+					oBody = document.getElementsByTagName("body")[0];
+				oScript.src=('/dist/Demo23.js?v='+new Date().getTime());
+				oBody.appendChild(oScript);
+			})();
+		</script>
+
+	</body>
+</html>
+
